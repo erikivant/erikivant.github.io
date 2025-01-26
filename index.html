@@ -1,11 +1,41 @@
 <!DOCTYPE html>
-<html>
-<h2>Lichess TV</h2>
-<iframe src="https://lichess.org/tv" width="800" height="600" frameborder="0"></iframe>
-
-
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Erik's Lichess TV</title>
+</head>
 <body>
-<h1>Hello World</h1>
-<p>I'm hosted with GitHub Pages.</p>
+    <h1>Welcome to Erik's Website</h1>
+    <p>Explore live chess games from Lichess TV!</p>
+
+    <h2>Lichess TV</h2>
+    <div id="lichess-tv">
+        <p>Loading Lichess TV game...</p>
+    </div>
+
+    <script>
+        // Fetch Lichess TV live game data
+        fetch('https://lichess.org/api/tv/feed')
+            .then((response) => response.json())
+            .then((data) => {
+                const tvDiv = document.getElementById('lichess-tv');
+                // Embed the live game from Lichess TV
+                tvDiv.innerHTML = `
+                    <p><strong>Currently Playing:</strong> ${data.d.players[0].name} (Rating: ${data.d.players[0].rating}) 
+                    vs ${data.d.players[1].name} (Rating: ${data.d.players[1].rating})</p>
+                    <iframe 
+                        src="https://lichess.org/${data.d.id}" 
+                        width="800" 
+                        height="600" 
+                        frameborder="0">
+                    </iframe>`;
+            })
+            .catch((error) => {
+                const tvDiv = document.getElementById('lichess-tv');
+                tvDiv.innerHTML = `<p>Error fetching Lichess TV data. Please try again later.</p>`;
+                console.error('Error fetching Lichess TV data:', error);
+            });
+    </script>
 </body>
 </html>
